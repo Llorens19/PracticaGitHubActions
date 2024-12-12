@@ -28,22 +28,18 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Start server and run Cypress tests
-        uses: cypress-io/github-action@v5
-        with:
-          config-file: cypress.json
-          build: npm run build
-          start: npm start
-        continue-on-error: true
-        id: cypress
-          # start: npm run dev
-          # wait-on: http://localhost:3000
-          # wait-on-timeout: 120
-          # record: false
-          # browser: electron
+      - name: Build application
+        run: npm run build
 
-      - name: Save Cypress results
-        run: echo "Success" > result.txt
+      - name: Start server and run Cypress tests
+        run: |
+          npm start & # Inicia el servidor en segundo plano
+          npx wait-on http://localhost:3000 # Espera a que el servidor esté listo
+          npx cypress run > result.txt # Ejecuta Cypress y guarda el resultado en result.txt
+        continue-on-error: true
+
+      - name: Display test results
+        run: cat result.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
