@@ -43,10 +43,27 @@ jobs:
           # browser: electron
 
       - name: Save Cypress results
-        run: echo "Success" > result.txt
+        run: echo "${{ steps.cypress.outputs.run_url }}" > result.txt
+
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: cypress-results
           path: result.txt
+          
+  deploy_job:
+    needs: cypress_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          zeit-token: ${{ secrets.VERCEL_TOKEN }} 
+          vercel-args: '--prod'
+          working-directory: ./
