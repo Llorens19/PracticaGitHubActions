@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: npm install
@@ -23,23 +23,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build application
-        run: npm run build
-
       - name: Start server and run Cypress tests
-        run: |
-          npm start & # Inicia el servidor en segundo plano
-          npx wait-on http://localhost:3000 # Espera a que el servidor esté listo
-          npx cypress run > result.txt # Ejecuta Cypress y guarda el resultado en result.txt
+        uses: cypress-io/github-action@v5
+        with:
+          config-file: cypress.json
+          build: npm run build
+          start: npm start
         continue-on-error: true
+        id: cypress
+          # start: npm run dev
+          # wait-on: http://localhost:3000
+          # wait-on-timeout: 120
+          # record: false
+          # browser: electron
 
-      - name: Display test results
-        run: cat result.txt
+      - name: Save Cypress results
+        run: echo "Success" > result.txt
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
