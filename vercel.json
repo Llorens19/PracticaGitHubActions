@@ -1,6 +1,10 @@
 {
   "version": 2,
+  "name": "practica-github-actions", 
+  "builds": [
+    { "src": "package.json", "use": "@vercel/next" }
+  ],
   "github": {
-    "enabled": false
+    "enabled": true
   }
 }

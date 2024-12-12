@@ -64,5 +64,5 @@ jobs:
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.TOKENGITHUB }} 
-          vercel-args: '--prod --yes --project-name practica-github-actions'
+          vercel-args: '--prod --yes'
           working-directory: ./
