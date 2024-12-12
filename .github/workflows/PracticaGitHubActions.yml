@@ -1,47 +1,51 @@
 name: PracticaGitHubActions
 
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
 
 jobs:
-    linter_job:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
+  linter_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-            - name: Install dependencies
-              run: npm install
+      - name: Install dependencies
+        run: npm install
 
-            - name: Run linter
-              run: npm run lint
+      - name: Run linter
+        run: npm run lint
 
-    cypress_job:
-        needs: linter_job
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
+  cypress_job:
+    needs: linter_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-            - name: Install dependencies
-              run: npm install
+      - name: Install dependencies
+        run: npm install
 
-            - name: Run Cypress tests
-              uses: cypress-io/github-action@v5
-              with:
-                  start: npm run dev
-                  wait-on: http://localhost:3000
-                  wait-on-timeout: 120
-                  record: false
+      - name: Update caniuse-lite
+        run: npx browserslist@latest --update-db
 
-            - name: Save Cypress results
-              run: echo "$(npx cypress run || echo 'failure')" > result.txt
-              continue-on-error: true
+      - name: Start server and run Cypress tests
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm run dev
+          wait-on: http://localhost:3000
+          wait-on-timeout: 120
+          record: false
+          browser: electron
 
-            - name: Upload artifact
-              uses: actions/upload-artifact@v3
-              with:
-                  name: cypress-results
-                  path: result.txt
+      - name: Save Cypress results
+        run: echo "$(npx cypress run --headless || echo 'failure')" > result.txt
+        continue-on-error: true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-results
+          path: result.txt
