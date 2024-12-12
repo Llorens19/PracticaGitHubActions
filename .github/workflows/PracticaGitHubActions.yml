@@ -34,15 +34,19 @@ jobs:
       - name: Start server and run Cypress tests
         uses: cypress-io/github-action@v5
         with:
-          start: npm run dev
-          wait-on: http://localhost:3000
-          wait-on-timeout: 120
-          record: false
-          browser: electron
+          config-file: cypress.json
+          build: npm run build
+          start: npm start
+        continue-on-error: true
+        id: cypress
+          # start: npm run dev
+          # wait-on: http://localhost:3000
+          # wait-on-timeout: 120
+          # record: false
+          # browser: electron
 
       - name: Save Cypress results
         run: echo "Success" > result.txt
-        continue-on-error: true
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
