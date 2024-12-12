@@ -43,7 +43,7 @@ jobs:
           # browser: electron
 
       - name: Save Cypress results
-        run: echo "${{ steps.cypress.outputs.run_url }}" > result.txt
+        run: echo "${{ steps.cypress.outputs }}" > result.txt
 
 
       - name: Upload artifact
@@ -64,5 +64,5 @@ jobs:
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.TOKENGITHUB }} 
-          vercel-args: '--prod --yes'
+          vercel-args: '--prod --yes --project-name practica-github-actions'
           working-directory: ./
