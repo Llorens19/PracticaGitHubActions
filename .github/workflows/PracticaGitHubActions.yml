@@ -28,9 +28,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Update caniuse-lite
-        run: npx browserslist@latest --update-db
-
       - name: Start server and run Cypress tests
         uses: cypress-io/github-action@v5
         with:
