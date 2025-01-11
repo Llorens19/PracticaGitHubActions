@@ -16,10 +16,15 @@ Este repositorio contiene una práctica de GitHub Actions para la asignatura de 
 
 ## Indice
 
-- [Descripción](#descripción)
-- [Indice](#indice)
 - [Proceso de la práctica](#proceso-de-la-práctica)
-    - [Linter_job](#linter_job)
+  - [Inicio de la práctica](#inicio-de-la-práctica)
+  - [Linter_job](#linter_job)
+  - [Cypress_job](#cypress_job)
+  - [Deploy_job](#deploy_job)
+  - [Add_badge_job](#add_badge_job)
+  - [Metrics_job](#metrics_job)
+  - [Notification_job](#notification_job)
+- [Historial de todos los test realizados](#historial-de-todos-los-test-realizados)
 - [Metricas](#metricas)
 - [Resultado test Cypress](#resultado-test-cypress)
 
