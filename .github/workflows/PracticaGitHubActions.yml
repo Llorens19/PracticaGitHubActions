@@ -97,30 +97,27 @@ jobs:
       - name: Update README with badge
         run: |
           awk '/## Resultados de los Últimos Tests/ {print; print ($CYPRESS_OUTCOME == "failure" ? "![Test Badge](https://img.shields.io/badge/test-failure-red)" : "![Test Badge](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)"); next} 1' README.md > temp.md && mv temp.md README.md
-          git config --global user.email "alvgarcam@alu.edu.gva.es"
-          git config --global user.name "AlvaroGarCam"
+          git config --global user.email "llorens19@example.com"
+          git config --global user.name "llorens19"
           git add README.md
           git commit -m "Update README.md with Cypress test results" || echo "No changes to commit"
-          git reset HEAD result.txt  # Resetea el archivo result.txt para evitar conflictos
-          git stash || echo "No changes to stash"
           git fetch origin main
           git rebase origin/main || (git rebase --abort && echo "Rebase failed; skipping rebase")
           git push origin main || echo "Push failed; skipping push"
         
-          
-          
   metrics_job:
+    needs: cypress_job
     runs-on: ubuntu-latest
     steps:
       - name: Checkout personal repository
         uses: actions/checkout@v4
         with:
-          repository: llorens19/PracticaGitHubActions
           token: ${{ secrets.TOKENGITHUB }}
 
-      - name: Generate metrics
+      - name: Generate GitHub metrics
         uses: lowlighter/metrics@latest
         with:
+          filename: github-metrics.svg
           token: ${{ secrets.TOKENGITHUB }}
           base: repositories          
           template: classic           
@@ -128,16 +125,16 @@ jobs:
 
       - name: Update README with metrics
         run: |
-          echo "Añadiendo métricas al README.md..."
-          cat metrics.md >> README.md
+          echo "Updating README.md with metrics..."
+          awk '/## Resultados de Métricas/ {print; print "![Metrics](github-metrics.svg)"; next} 1' README.md > temp.md && mv temp.md README.md
           git config --global user.email "llorenssorianodiego@gmail.com"
           git config --global user.name "llorens19"
           git add README.md
-          git commit -m "Update README.md with metrics" || echo "No changes to commit"
-          git pull --rebase origin main
+          git commit -m "Update README.md with static GitHub metrics" || echo "No changes to commit"
+          git fetch origin main
+          git rebase origin/main || (git rebase --abort && echo "Rebase failed; skipping rebase")
           git push origin main || echo "Push failed; skipping push"
 
-          
   notification_job:
     needs: [linter_job, cypress_job, add_badge_job, deploy_job, metrics_job]
     runs-on: ubuntu-latest
