@@ -67,29 +67,29 @@ jobs:
           vercel-args: '--prod --yes'
           working-directory: ./ 
           
-  add_badge_job:
-    needs: cypress_job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # add_badge_job:
+  #   needs: cypress_job
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Download Cypress results artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: cypress-results
+  #     - name: Download Cypress results artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: cypress-results
 
-      - name: Read artifact and set output
-        id: badge_result
-        run: |
-          RESULT=$(cat result.txt)
-          if [[ "$RESULT" == *"failure"* ]]; then
-            echo "::set-output name=cypress_outcome::failure"
-          else
-            echo "::set-output name=cypress_outcome::success"
-          fi
+  #     - name: Read artifact and set output
+  #       id: badge_result
+  #       run: |
+  #         RESULT=$(cat result.txt)
+  #         if [[ "$RESULT" == *"failure"* ]]; then
+  #           echo "::set-output name=cypress_outcome::failure"
+  #         else
+  #           echo "::set-output name=cypress_outcome::success"
+  #         fi
 
-      - name: Update README with badge
-        uses: ./update-readme-action
-        with:
-          cypress_outcome: ${{ steps.badge_result.outputs.cypress_outcome }}
+  #     - name: Update README with badge
+  #       uses: ./update-readme-action
+  #       with:
+  #         cypress_outcome: ${{ steps.badge_result.outputs.cypress_outcome }}
