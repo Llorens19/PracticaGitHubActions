@@ -139,7 +139,7 @@ jobs:
 
           
   notification_job:
-    needs: [linter_job, cypress_job, add_badge_job, deploy_job, metrics_job]
+    needs: [linter_job, cypress_job, add_badge_job, deploy_job]
     runs-on: ubuntu-latest
     if: always()
     steps:
