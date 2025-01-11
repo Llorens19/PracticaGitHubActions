@@ -110,32 +110,29 @@ jobs:
           
           
   metrics_job:
-    needs: cypress_job
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout personal repository
         uses: actions/checkout@v4
+        with:
+          repository: your-username/your-username
+          token: ${{ secrets.TOKENGITHUB }}
 
-      - name: Generate GitHub metrics
+      - name: Generate metrics
         uses: lowlighter/metrics@latest
         with:
-          filename: github-metrics.svg
           token: ${{ secrets.TOKENGITHUB }}
-          base: ""
-          plugin_languages: yes
-          plugin_languages_ignored: >-
-            html, css, tex, less, dockerfile, makefile, qmake, lex, cmake, shell,
-            gnuplot
-          plugin_languages_limit: 4
+          base: repositories          # Puedes elegir el panel de métricas que prefieras
+          template: classic           # Diseño del panel (puedes probar otros)
+          config_timezone: Europe/Madrid # Cambia la zona horaria si lo necesitas
 
       - name: Update README with metrics
         run: |
-          echo "Updating README.md with metrics..."
-          awk '/## Resultados de Métricas/ {print; print "![Metrics](github-metrics.svg)"; next} 1' README.md > temp.md && mv temp.md README.md
+          echo "Añadiendo métricas al README.md..."
+          cat metrics.md >> README.md
           git config --global user.email "alvgarcam@alu.edu.gva.es"
           git config --global user.name "AlvaroGarCam"
           git add README.md
-          git commit -m "Update README.md with static GitHub metrics" || echo "No changes to commit"
-          git fetch origin main
-          git rebase origin/main || (git rebase --abort && echo "Rebase failed; skipping pull step")
+          git commit -m "Update README.md with metrics" || echo "No changes to commit"
+          git pull --rebase origin main
           git push origin main || echo "Push failed; skipping push"
