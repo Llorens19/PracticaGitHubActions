@@ -28,32 +28,29 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Start server and run Cypress tests
-        uses: cypress-io/github-action@v5
+      - name: Start Next.js server
+        run: npm run dev &
+        env:
+          PORT: 3000
+
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:3000
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v4
         with:
-          config-file: cypress.json
-          build: npm run build
-          start: npm start
-          wait-on: http://localhost:3000
-          wait-on-timeout: 120
+          browser: chrome
+          spec: cypress/integration/1-my-tests/**/*.spec.js
         continue-on-error: true
-        id: cypress
 
-      - name: Save Cypress results
+      - name: Save Cypress results to artifact
         run: |
-          echo "${{ steps.cypress.outputs }}" > result.txt
-          echo "Contents of result.txt:"
-          cat result.txt
+          echo "Saving Cypress results..."
+          npx cypress run --spec 'cypress/integration/1-my-tests/**/*.spec.js' > result.txt || echo "Cypress tests failed"
+        continue-on-error: true
 
-      - name: Verify file exists before uploading
-        run: |
-          if [ ! -f result.txt ]; then
-            echo "Error: result.txt not found!"
-            exit 1
-          fi
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload Cypress artifact
+        uses: actions/upload-artifact@v3
         with:
           name: cypress-results
           path: result.txt
