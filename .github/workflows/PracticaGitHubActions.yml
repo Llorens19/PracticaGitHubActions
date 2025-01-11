@@ -146,7 +146,7 @@ jobs:
       - name: Send Telegram Notification
         run: |
           echo "Preparing Telegram notification..."
-          JOB_RESULTS="S'ha realitzat un push en la branca main que ha provocat l'execució del workflow nextjs-project-improvements_workflow amb els següents resultats:\n\n"
+          JOB_RESULTS="Estado de los trabajos :\n\n"
           JOB_RESULTS+=" - linter_job: ${{ needs.linter_job.result }}\n"
           JOB_RESULTS+=" - cypress_job: ${{ needs.cypress_job.result }}\n"
           JOB_RESULTS+=" - add_badge_job: ${{ needs.add_badge_job.result }}\n"
