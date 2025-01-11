@@ -115,23 +115,23 @@ jobs:
       - name: Checkout personal repository
         uses: actions/checkout@v4
         with:
-          repository: your-username/your-username
+          repository: llorens19/PracticaGitHubActions
           token: ${{ secrets.TOKENGITHUB }}
 
       - name: Generate metrics
         uses: lowlighter/metrics@latest
         with:
           token: ${{ secrets.TOKENGITHUB }}
-          base: repositories          # Puedes elegir el panel de métricas que prefieras
-          template: classic           # Diseño del panel (puedes probar otros)
-          config_timezone: Europe/Madrid # Cambia la zona horaria si lo necesitas
+          base: repositories          
+          template: classic           
+          config_timezone: Europe/Madrid 
 
       - name: Update README with metrics
         run: |
           echo "Añadiendo métricas al README.md..."
           cat metrics.md >> README.md
-          git config --global user.email "alvgarcam@alu.edu.gva.es"
-          git config --global user.name "AlvaroGarCam"
+          git config --global user.email "llorenssorianodiego@gmail.com" # Reemplaza con tu correo real
+          git config --global user.name "llorens19"
           git add README.md
           git commit -m "Update README.md with metrics" || echo "No changes to commit"
           git pull --rebase origin main
