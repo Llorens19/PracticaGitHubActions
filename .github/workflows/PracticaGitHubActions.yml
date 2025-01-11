@@ -42,10 +42,15 @@ jobs:
       - name: Save Cypress results
         run: |
           echo "${{ steps.cypress.outputs }}" > result.txt
-          cat result.txt  # Verificar contenido
+          echo "Contents of result.txt:"
+          cat result.txt
 
-      - name: Verify file exists
-        run: ls -l result.txt || echo "result.txt does not exist"
+      - name: Verify file exists before uploading
+        run: |
+          if [ ! -f result.txt ]; then
+            echo "Error: result.txt not found!"
+            exit 1
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
