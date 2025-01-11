@@ -130,7 +130,7 @@ jobs:
         run: |
           echo "Añadiendo métricas al README.md..."
           cat metrics.md >> README.md
-          git config --global user.email "llorenssorianodiego@gmail.com" # Reemplaza con tu correo real
+          git config --global user.email "llorenssorianodiego@gmail.com"
           git config --global user.name "llorens19"
           git add README.md
           git commit -m "Update README.md with metrics" || echo "No changes to commit"
@@ -139,7 +139,7 @@ jobs:
 
           
   notification_job:
-    needs: [linter_job, cypress_job, add_badge_job, deploy_job]
+    needs: [linter_job, cypress_job, add_badge_job, deploy_job, metrics_job]
     runs-on: ubuntu-latest
     if: always()
     steps:
