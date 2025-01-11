@@ -192,6 +192,7 @@ add_badge_job:
       - name: Update README with badge
         run: |
           awk '/## Resultados de los Últimos Tests/ {print; print ($CYPRESS_OUTCOME == "failure" ? "![Test Badge](https://img.shields.io/badge/test-failure-red)" : "![Test Badge](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)"); next} 1' README.md > temp.md && mv temp.md README.md
+![Test Badge](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)
           git config --global user.email "llorens19@example.com"
           git config --global user.name "llorens19"
           git add README.md
