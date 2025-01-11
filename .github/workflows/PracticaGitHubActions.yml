@@ -68,28 +68,37 @@ jobs:
           working-directory: ./ 
           
   add_badge_job:
-    needs: cypress_job
+    # needs: metrics_job
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.TOKENGITHUB }}
 
-      - name: Download Cypress results artifact
-        uses: actions/download-artifact@v4
+      - name: Download Cypress artifact
+        uses: actions/download-artifact@v3
         with:
           name: cypress-results
 
-      - name: Read artifact and set output
-        id: badge_result
+      - name: Determine Cypress result
+        id: read_result
         run: |
-          RESULT=$(cat result.txt)
-          if [[ "$RESULT" == *"failure"* ]]; then
-            echo "::set-output name=cypress_outcome::failure"
+          echo "Reading Cypress result..."
+          if grep -q "failure" result.txt; then
+            echo "CYPRESS_OUTCOME=failure" >> $GITHUB_ENV
           else
-            echo "::set-output name=cypress_outcome::success"
+            echo "CYPRESS_OUTCOME=success" >> $GITHUB_ENV
           fi
 
       - name: Update README with badge
-        uses: ./update-readme-action
-        with:
-          cypress_outcome: ${{ steps.badge_result.outputs.cypress_outcome }}
+        run: |
+          echo "Updating README.md with badge..."
+          awk '/## Resultados de los Últimos Tests/ {print; print ($CYPRESS_OUTCOME == "failure" ? "![Test Badge](https://img.shields.io/badge/test-failure-red)" : "![Test Badge](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)"); next} 1' README.md > temp.md && mv temp.md README.md
+          git config --global user.email "alvgarcam@alu.edu.gva.es"
+          git config --global user.name "AlvaroGarCam"
+          git add README.md
+          git commit -m "Update README.md with Cypress test results" || echo "No changes to commit"
+          git fetch origin main
+          git rebase origin/main || (git rebase --abort && echo "Rebase failed; skipping rebase")
+          git push origin main || echo "Push failed; skipping push"
