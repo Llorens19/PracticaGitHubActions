@@ -241,6 +241,7 @@ metrics_job:
           awk '/## Resultados de Métricas/ {print; print "![Metrics](github-metrics.svg)"; next} 1' README.md > temp.md && mv temp.md README.md
 ![Metrics](github-metrics.svg)
 ![Metrics](github-metrics.svg)
+![Metrics](github-metrics.svg)
           git config --global user.email "llorenssorianodiego@gmail.com"
           git config --global user.name "llorens19"
           git add README.md
