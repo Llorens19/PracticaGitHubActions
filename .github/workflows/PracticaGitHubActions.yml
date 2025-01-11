@@ -136,3 +136,22 @@ jobs:
           git commit -m "Update README.md with metrics" || echo "No changes to commit"
           git pull --rebase origin main
           git push origin main || echo "Push failed; skipping push"
+
+          
+  notification_job:
+    needs: [linter_job, cypress_job, add_badge_job, deploy_job, metrics_job]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Send Telegram Notification
+        run: |
+          echo "Preparing Telegram notification..."
+          JOB_RESULTS="S'ha realitzat un push en la branca main que ha provocat l'execució del workflow nextjs-project-improvements_workflow amb els següents resultats:\n\n"
+          JOB_RESULTS+=" - linter_job: ${{ needs.linter_job.result }}\n"
+          JOB_RESULTS+=" - cypress_job: ${{ needs.cypress_job.result }}\n"
+          JOB_RESULTS+=" - add_badge_job: ${{ needs.add_badge_job.result }}\n"
+          JOB_RESULTS+=" - deploy_job: ${{ needs.deploy_job.result }}\n"
+          JOB_RESULTS+=" - metrics_job: ${{ needs.metrics_job.result }}\n"
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -d text="$(echo -e "$JOB_RESULTS")"
