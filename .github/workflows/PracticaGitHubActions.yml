@@ -78,6 +78,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.TOKENGITHUB }}
+          fetch-depth: 0
 
       - name: Download Cypress artifact
         uses: actions/download-artifact@v3
@@ -100,6 +101,9 @@ jobs:
           git config --global user.name "AlvaroGarCam"
           git add README.md
           git commit -m "Update README.md with Cypress test results" || echo "No changes to commit"
+          git reset HEAD result.txt  # Resetea el archivo result.txt para evitar conflictos
+          git stash || echo "No changes to stash"
           git fetch origin main
           git rebase origin/main || (git rebase --abort && echo "Rebase failed; skipping rebase")
           git push origin main || echo "Push failed; skipping push"
+        
