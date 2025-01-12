@@ -29,6 +29,11 @@ Este repositorio contiene una práctica de GitHub Actions para la asignatura de 
 - [Resultado test Cypress](#resultado-test-cypress)
 
 
+## Que es GitHub Actions
+GitHub Actions es una herramienta de CI/CD que permite automatizar tareas y flujos de trabajo en GitHub. Se basa en la ejecución de workflows, que son archivos de configuración escritos en YAML que definen las acciones que se deben realizar en respuesta a eventos específicos en un repositorio de GitHub. 
+
+
+
 ## Proceso de la práctica
 
 ### Inicio de la práctica 
