@@ -588,6 +588,7 @@ metrics_job:
 ![Metrics](github-metrics.svg)
 ![Metrics](github-metrics.svg)
 ![Metrics](github-metrics.svg)
+![Metrics](github-metrics.svg)
           git config --global user.email "llorenssorianodiego@gmail.com"
           git config --global user.name "llorens19"
           git add README.md
