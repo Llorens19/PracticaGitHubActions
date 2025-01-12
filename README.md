@@ -512,6 +512,7 @@ add_badge_job:
 ![Test Badge](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)
 ![Test Badge](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)
 ![Test Badge](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)
+![Test Badge](https://img.shields.io/badge/tested%20with-Cypress-04C38E.svg)
           git config --global user.email "llorens19@example.com"
           git config --global user.name "llorens19"
           git add README.md
